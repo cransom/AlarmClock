@@ -41,7 +41,7 @@ class WundergroundClient: public JsonListener {
     int gmtOffset = 1;
     long localMillisAtUpdate;
     String date = "-";
-    boolean isMetric = true;
+    boolean isMetric = false;
     String currentTemp;
     // JJG added ... ////////////////////////////////// define returns /////////////////////////////////
     String moonPctIlum;  // not used
@@ -100,21 +100,24 @@ class WundergroundClient: public JsonListener {
   // end fowlerk add
   int TZO;
   boolean locationCity = false;
+  boolean locationState = false;
   boolean locationCountry = false;
   String city;
+  String state;
   String country;
   public:
     int getTzOffset();
     String getCity();
+    String getState();
     String getCountry();
     void updateLocation(String apiKey, String lat, String lon);
     
     WundergroundClient(boolean isMetric);
-    void updateConditions(String apiKey, String language, String country, String city);
+    void updateConditions(String apiKey, String language, String country, String state, String city);
     void updateConditions(String apiKey, String language, String zmwCode);
-    void updateForecast(String apiKey, String language, String country, String city);
-    void updateAstronomy(String apiKey, String language, String country, String city);
-  void updateAlerts(String apiKey, String language, String country, String city);   // Added by fowlerk, 18-Dec-2016
+    void updateForecast(String apiKey, String language, String country, String state, String city);
+    void updateAstronomy(String apiKey, String language, String country, String state, String city);
+  void updateAlerts(String apiKey, String language, String country, String state, String city);   // Added by fowlerk, 18-Dec-2016
   void initMetric(boolean isMetric);      // Added by fowlerk, 12/22/16, as an option to change metric setting other than at instantiation
   
     // JJG added

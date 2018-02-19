@@ -41,9 +41,9 @@ void WundergroundClient::initMetric(boolean _isMetric) {
 }
 // end add fowlerk, 12/22/16
 
-void WundergroundClient::updateConditions(String apiKey, String language, String country, String city) {
+void WundergroundClient::updateConditions(String apiKey, String language, String country, String state, String city) {
   isForecast = false;
-  doUpdate("/api/" + apiKey + "/conditions/lang:" + language + "/q/" + country + "/" + city + ".json");
+  doUpdate("/api/" + apiKey + "/conditions/lang:" + language + "/q/" + country + "/" +state + "/" + city + ".json");
 }
 
 // wunderground change the API URL scheme:
@@ -55,24 +55,25 @@ void WundergroundClient::updateConditions(String apiKey, String language, String
 
 void WundergroundClient::updateLocation(String apiKey, String lat, String lon) {
   locationCity = true;
+  locationState = true;
   locationCountry = true;
   doUpdate("/api/" + apiKey + "/geolookup/q/" + lat + "," + lon + ".json");
 }
 
-void WundergroundClient::updateForecast(String apiKey, String language, String country, String city) {
+void WundergroundClient::updateForecast(String apiKey, String language, String country, String state, String city) {
   isForecast = true;
   doUpdate("/api/" + apiKey + "/forecast10day/lang:" + language + "/q/" + country + "/" + city + ".json");
 }
 
 // JJG added ////////////////////////////////
-void WundergroundClient::updateAstronomy(String apiKey, String language, String country, String city) {
+void WundergroundClient::updateAstronomy(String apiKey, String language, String country, String state, String city) {
   isForecast = true;
   doUpdate("/api/" + apiKey + "/astronomy/lang:" + language + "/q/" + country + "/" + city + ".json");
 }
 // end JJG add  ////////////////////////////////////////////////////////////////////
 
 // fowlerk added
-void WundergroundClient::updateAlerts(String apiKey, String language, String country, String city) {
+void WundergroundClient::updateAlerts(String apiKey, String language, String country, String state, String city) {
   currentAlert = 0;
   activeAlertsCnt = 0;
   isForecast = false;
@@ -196,14 +197,21 @@ void WundergroundClient::value(String value) {
   if (currentKey =="city"){
     if (locationCity) {
       city = value;
-      //Serial.println(city);
+      Serial.println(city);
       locationCity = false;
+    }
+  }
+  if (currentKey =="state"){
+    if (locationState) {
+      state = value;
+      Serial.println(state);
+      locationState = false;
     }
   }
   if (currentKey =="country_iso3166"){
     if (locationCountry) {
       country = value;
-      //Serial.println(value);
+      Serial.println(value);
       locationCountry = false;
     }    
   }
@@ -542,6 +550,9 @@ int WundergroundClient::getTzOffset(){
 }
 String WundergroundClient::getCity(){
   return city;
+}
+String WundergroundClient::getState(){
+  return state;
 }
 String WundergroundClient::getCountry(){
   return country;

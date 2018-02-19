@@ -64,17 +64,16 @@ void displayScreen() {
         display.setTextAlignment(TEXT_ALIGN_RIGHT);
         display.drawString(rightBound, 45, Wzeit);
         display.setTextAlignment(TEXT_ALIGN_LEFT);
-        String temp = wunderground.getCurrentTemp() + "°C";
-        int ICP = display.getStringWidth(temp);
+        String temp = wunderground.getCurrentTemp() + "°F";
         display.drawString(0,45,temp);
         display.setFont(Meteocons_Plain_21);
         String weatherIcon = wunderground.getTodayIcon();
-        display.drawString(ICP +4,44,weatherIcon); 
+        display.drawString(10,44,weatherIcon);
        } //alarmFlag
       else {
         display.setFont(Roboto_Condensed_20);
         display.setTextAlignment(TEXT_ALIGN_LEFT);
-        String temp = wunderground.getCurrentTemp() + "°C";
+        String temp = wunderground.getCurrentTemp() + "°F";
         int ICP = display.getStringWidth(temp);
         ICP = (ICP +25)/2;
         display.setTextAlignment(TEXT_ALIGN_LEFT);

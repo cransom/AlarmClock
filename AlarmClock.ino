@@ -65,6 +65,7 @@ Middle - D3
 
 
 #include <NTPClient.h>
+#include <Time.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 #include <WiFiManager.h>
@@ -74,13 +75,15 @@ Middle - D3
 #include <Ticker.h>
 #include "WifiLocator.h"
 #include <EEPROM.h>
+#include "secret.h"
 // Weather
 #include <JsonListener.h>
 #include "API_Wonder.h"
-const boolean IS_METRIC = true;
-const String WUNDERGRROUND_API_KEY = "Your Wunderground API";
+const boolean IS_METRIC = false;
+const String WUNDERGRROUND_API_KEY = WUNDERKEY;
 const String WUNDERGRROUND_LANGUAGE = "EN";
 String WUNDERGROUND_COUNTRY;
+String WUNDERGROUND_STATE;
 String WUNDERGROUND_CITY;
 const int UPDATE_INTERVAL_SECS = 15 * 60; // Update every 15 minutes
 WundergroundClient wunderground(IS_METRIC);
@@ -139,6 +142,7 @@ WifiLocator locator;
 
 void setup(){
   Serial.begin(115200);
+
   
   display.init();
   display.flipScreenVertically();
@@ -176,15 +180,17 @@ void setup(){
 
   timeClient.begin();
   timeClient.update();
+  // setSyncProvider(getNtpTime);
 
   locator.updateLocation();
   wunderground.updateLocation(WUNDERGRROUND_API_KEY, locator.getLat(), locator.getLon());
   WUNDERGROUND_COUNTRY = wunderground.getCountry();
   WUNDERGROUND_CITY = wunderground.getCity();
+  WUNDERGROUND_STATE = wunderground.getState();
   display.clear();
   display.drawString(0, 20, wunderground.getCity());
   display.display();
-  wunderground.updateConditions(WUNDERGRROUND_API_KEY, WUNDERGRROUND_LANGUAGE, WUNDERGROUND_COUNTRY, WUNDERGROUND_CITY);
+  wunderground.updateConditions(WUNDERGRROUND_API_KEY, WUNDERGRROUND_LANGUAGE, WUNDERGROUND_COUNTRY, WUNDERGROUND_STATE, WUNDERGROUND_CITY);
   timeClient.setTimeOffset(wunderground.getTzOffset());
 
   attachInterrupt(encoderA, setWeckZeit, FALLING);
@@ -216,7 +222,7 @@ void loop() {
   digitalWrite(beeper,nowAlarm && alarmFlag && beepEnable);
 
   if (readyForWeatherUpdate) {
-      wunderground.updateConditions(WUNDERGRROUND_API_KEY, WUNDERGRROUND_LANGUAGE, WUNDERGROUND_COUNTRY, WUNDERGROUND_CITY);
+      wunderground.updateConditions(WUNDERGRROUND_API_KEY, WUNDERGRROUND_LANGUAGE, WUNDERGROUND_COUNTRY, WUNDERGROUND_STATE, WUNDERGROUND_CITY);
       timeClient.setTimeOffset(wunderground.getTzOffset());
       readyForWeatherUpdate = false;
   }
