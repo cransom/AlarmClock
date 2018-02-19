@@ -64,6 +64,9 @@ Middle - D3
 */
 
 
+#include "secret.h"
+
+#include <Arduino.h>
 #include <NTPClient.h>
 #include <Time.h>
 #include <ESP8266WiFi.h>
@@ -75,7 +78,6 @@ Middle - D3
 #include <Ticker.h>
 #include "WifiLocator.h"
 #include <EEPROM.h>
-#include "secret.h"
 // Weather
 #include <JsonListener.h>
 #include "API_Wonder.h"
@@ -149,7 +151,7 @@ void setup(){
   display.setContrast(highContrast);
   display.setFont(Roboto_Condensed_20);
   display.clear();
-  display.drawString(0, 20, "Conect WiFi");
+  display.drawString(0, 20, "Connecting WiFi");
   display.display();
 
   EEPROM.begin(20);
@@ -175,7 +177,7 @@ void setup(){
   ArduinoOTA.begin();
 
   display.clear();
-  display.drawString(0, 20, "Conect NTP");
+  display.drawString(0, 20, "Getting time...");
   display.display();
 
   timeClient.begin();
