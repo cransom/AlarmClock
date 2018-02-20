@@ -68,7 +68,7 @@ Middle - D3
 
 #include <Arduino.h>
 #include <NTPClient.h>
-#include <Time.h>
+//#include <Time.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 #include <WiFiManager.h>

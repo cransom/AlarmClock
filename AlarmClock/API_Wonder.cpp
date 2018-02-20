@@ -197,6 +197,7 @@ void WundergroundClient::value(String value) {
   if (currentKey =="city"){
     if (locationCity) {
       city = value;
+      city.replace(" ", "_");
       Serial.println(city);
       locationCity = false;
     }
